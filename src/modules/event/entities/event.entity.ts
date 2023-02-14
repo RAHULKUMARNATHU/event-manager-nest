@@ -4,9 +4,9 @@ import { Column } from 'typeorm/decorator/columns/Column';
 import { PrimaryGeneratedColumn } from 'typeorm/decorator/columns/PrimaryGeneratedColumn';
 
 @Entity({ name: 'event' })
-export class Event extends BaseEntity {
+export class EventEntity {
   @ApiProperty({ description: 'Primary key as User Id', example: 1 })
-  @PrimaryGeneratedColumn()
+  @Column()
   id: number;
 
   @Column()
@@ -16,7 +16,7 @@ export class Event extends BaseEntity {
   description: string;
 
   @Column()
-  when: string;
+  when: Date;
 
   @Column()
   address: string;

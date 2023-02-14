@@ -1,6 +1,6 @@
 export class CreateEventDto {
-  private readonly name: string;
-  private readonly description: string;
-  private readonly when: string;
-  private readonly address: string;
+  readonly name: string;
+  readonly description: string;
+  readonly when: Date;
+  readonly address: string;
 }

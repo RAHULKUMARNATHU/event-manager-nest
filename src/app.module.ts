@@ -21,7 +21,6 @@ import { EventModule } from './modules/event/event.module';
       useFactory:
         process.env.NODE_ENV !== 'production' ? ormConfig : ormConfigProd,
     }),
-
   ],
 
   controllers: [AppController],

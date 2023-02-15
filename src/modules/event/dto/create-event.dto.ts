@@ -17,7 +17,7 @@ export class CreateEventDto {
   readonly description: string;
 
   @ApiProperty({ description: 'date of event', example: '12-05-22' })
-  @IsDateString()
+  // @IsDateString()
   readonly when: string;
 
   @ApiProperty({

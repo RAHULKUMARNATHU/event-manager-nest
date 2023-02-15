@@ -24,7 +24,7 @@ export class EventEntity {
   description: string;
 
   @ApiProperty({ description: 'date of event', example: '12-05-22' })
-  @Column()
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   when: Date;
 
   @ApiProperty({

@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Logger,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -16,27 +17,32 @@ import { EventEntity } from './entities/event.entity';
 @ApiTags('event-controllers')
 @Controller('event')
 export class EventController {
+  private readonly logger = new Logger(EventController.name);
+
   constructor(private readonly eventService: EventService) {}
 
   private events: EventEntity[] = [];
 
   @Post()
-  create(@Body() input: CreateEventDto) {
-    const event = {
-      ...input,
-      when: new Date(input.when),
-      id: this.events.length + 1,
-    };
-    this.events.push(event);
-    return event;
+  async createEvent(@Body() input: CreateEventDto) {
+    // const event = {
+    //   ...input,
+    //   when: new Date(input.when),
+    //   id: this.events.length + 1,
+    // };
+    // this.events.push(event);
+    // return event;
 
-    // return this.eventService.create(createEventDto);
+    return await this.eventService.createEvent(input);
   }
 
   @Get()
-  findAll() {
-    return this.events;
-    // return this.eventService.findAll();
+  async findAllEvents() {
+    // return this.events;
+    this.logger.log(`Hit the findAll route`);
+    const events = await this.eventService.findAllEvents();
+    this.logger.debug(`Found ${events.length} events`)
+    return events;
   }
 
   @Get(':id')

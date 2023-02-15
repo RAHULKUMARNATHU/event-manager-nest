@@ -16,7 +16,7 @@ export default registerAs(
     username: process.env.DB_USER || 'postgres',
     password: process.env.DB_PASSWORD ||  'Admin@123',
     database: process.env.DB_NAME,
-    entities: [Event],
+    entities: [EventEntity],
     synchronize: true,
     dropSchema: Boolean(parseInt(process.env.DB_DROP_SCHEMA)),
   }),

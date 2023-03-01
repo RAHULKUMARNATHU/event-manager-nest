@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger/dist/decorators';
-import { Entity, BaseEntity } from 'typeorm';
+import { Entity, OneToMany } from 'typeorm';
 import { Column } from 'typeorm/decorator/columns/Column';
 import { PrimaryGeneratedColumn } from 'typeorm/decorator/columns/PrimaryGeneratedColumn';
+import { Attendee } from './attendee.entity';
 
 @Entity({ name: 'event' })
 export class EventEntity {
@@ -33,4 +34,10 @@ export class EventEntity {
   })
   @Column()
   address: string;
+
+
+  @OneToMany(()=>Attendee , (attendee) => attendee.event , {
+    eager:true
+  })
+  attendees:Attendee[]
 }

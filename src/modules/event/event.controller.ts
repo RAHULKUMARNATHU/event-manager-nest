@@ -7,19 +7,26 @@ import {
   Param,
   Delete,
   Logger,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { ApiTags } from '@nestjs/swagger/dist';
 import { EventEntity } from './entities/event.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @ApiTags('event-controllers')
 @Controller('event')
 export class EventController {
   private readonly logger = new Logger(EventController.name);
 
-  constructor(private readonly eventService: EventService) {}
+  constructor(
+    @InjectRepository(EventEntity)
+    private readonly repository: Repository<EventEntity>,
+    private readonly eventService: EventService,
+  ) {}
 
   private events: EventEntity[] = [];
 
@@ -41,7 +48,7 @@ export class EventController {
     // return this.events;
     this.logger.log(`Hit the findAll route`);
     const events = await this.eventService.findAllEvents();
-    this.logger.debug(`Found ${events.length} events`)
+    this.logger.debug(`Found ${events.length} events`);
     return events;
   }
 
@@ -64,6 +71,14 @@ export class EventController {
     return this.events[index];
   }
 
+  @Get('practice2')
+  async practice2() {
+    const event = await this.repository.findOne({
+      where: { id: 1 },
+      // loadEagerRelations:false
+      relations: ['attendees'],
+    });
+  }
   @Delete(':id')
   remove(@Param('id') id: string) {
     // return this.eventService.remove(+id);

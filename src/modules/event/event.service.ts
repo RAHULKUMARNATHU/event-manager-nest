@@ -17,14 +17,16 @@ export class EventService {
 
   async findAllEvents() {
     const events = await this.repository.find();
-    if(!events){
-      throw new NotFoundException()
+    if (!events) {
+      throw new NotFoundException();
     }
     return events;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} event`;
+  async findOne(id: number) {
+    return await this.repository.findOne(
+      { where: { id } }
+    );
   }
 
   update(id: number, updateEventDto: UpdateEventDto) {

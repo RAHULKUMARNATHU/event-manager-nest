@@ -3,10 +3,9 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Attendee } from 'src/modules/event/entities/attendee.entity';
 // import { Profile } from './../auth/profile.entity';
 // import { User } from './../auth/user.entity';
-// import { Attendee } from './../events/attendee.entity';
 import { EventEntity } from 'src/modules/event/entities/event.entity';
-// import { Subject } from './../school/subject.entity';
-// import { Teacher } from './../school/teacher.entity';
+import { Teacher } from 'src/modules/school/teacher.entity';
+import { Subject } from 'src/modules/school/subject.entity';
 
 export default registerAs(
   'orm.config',
@@ -17,7 +16,7 @@ export default registerAs(
     username: process.env.DB_USER || 'postgres',
     password: process.env.DB_PASSWORD || 'Admin@123',
     database: process.env.DB_NAME,
-    entities: [EventEntity, Attendee],
+    entities: [EventEntity, Attendee, Subject, Teacher],
     synchronize: true,
     dropSchema: Boolean(parseInt(process.env.DB_DROP_SCHEMA)),
   }),

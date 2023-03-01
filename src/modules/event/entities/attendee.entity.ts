@@ -9,7 +9,7 @@ export class Attendee {
   @Column()
   name: string;
 
-  @ManyToOne(() => EventEntity, (event) => event.attendees)
+  @ManyToOne(() => EventEntity, (event) => event.attendees,{nullable:false})
   @JoinColumn()
   event: EventEntity;
 }

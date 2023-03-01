@@ -16,7 +16,7 @@ import { ApiTags } from '@nestjs/swagger/dist';
 import { EventEntity } from './entities/event.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
+import { Attendee } from './entities/attendee.entity';
 @ApiTags('event-controllers')
 @Controller('event')
 export class EventController {
@@ -25,6 +25,9 @@ export class EventController {
   constructor(
     @InjectRepository(EventEntity)
     private readonly repository: Repository<EventEntity>,
+    @InjectRepository(EventEntity)
+    private readonly attendeeRepository: Repository<Attendee>,
+
     private readonly eventService: EventService,
   ) {}
 
@@ -79,6 +82,24 @@ export class EventController {
       relations: ['attendees'],
     });
   }
+
+  @Get('practice')
+  async practice() {
+    const event = await this.repository.findOne({ where: { id: 1 } });
+    // const event = new EventEntity();
+    // event.id = 1;
+
+    const attendee = new Attendee();
+    attendee.name = 'Jerry';
+    // attendee.event = event;
+
+    event.attendees.push(attendee);
+    event.attendees = [];
+    // await this.attendeeRepository.save(attendee);
+    await this.attendeeRepository.save(event);
+    return event;
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     // return this.eventService.remove(+id);

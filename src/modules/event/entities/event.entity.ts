@@ -35,9 +35,10 @@ export class EventEntity {
   @Column()
   address: string;
 
-
-  @OneToMany(()=>Attendee , (attendee) => attendee.event , {
-    eager:true
+  @OneToMany(() => Attendee, (attendee) => attendee.event, {
+    // eager:true
+    cascade: true,
+    // cascade: ['insert', 'update'],
   })
-  attendees:Attendee[]
+  attendees: Attendee[];
 }

@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Logger,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -18,6 +19,8 @@ import { EventEntity } from './entities/event.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Attendee } from './entities/attendee.entity';
+import { ListEvents } from './dto/list.event';
+// import { Query } from '@nestjs/common/decorators';
 @ApiTags('event-controllers')
 @Controller('event')
 export class EventController {
@@ -48,11 +51,13 @@ export class EventController {
   }
 
   @Get()
-  async findAllEvents() {
+  async findAllEvents(@Query() filter: ListEvents) {
     // return this.events;
     this.logger.log(`Hit the findAll route`);
-    const events = await this.eventService.findAllEvents();
-    this.logger.debug(`Found ${events.length} events`);
+    const events = await this.eventService.getEventsWithAttendeeCountFiltered(
+      filter,
+    );
+    // this.logger.debug(`Found ${events.length} events`);
     return events;
   }
 

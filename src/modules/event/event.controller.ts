@@ -6,8 +6,9 @@ import {
   Patch,
   Param,
   Delete,
-  Logger,
   ParseIntPipe,
+  Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -55,10 +56,22 @@ export class EventController {
     return events;
   }
 
+  // @Get(':id')
+  // async findOne(@Param('id' , parseInt) id: number) {
+  //   // const event = this.events.find((event) => event.id === parseInt(id));
+  //   const event = await this.eventService.getEvent(id);
+  //   return event;
+  // }
+
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    const event = this.events.find((event) => event.id === parseInt(id));
-    // return this.eventService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    // console.log(typeof id);
+    const event = await this.eventService.getEvent(id);
+
+    if (!event) {
+      throw new NotFoundException();
+    }
+
     return event;
   }
 

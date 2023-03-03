@@ -41,4 +41,12 @@ export class EventEntity {
     // cascade: ['insert', 'update'],
   })
   attendees: Attendee[];
+
+  attendeeCount?: number;
+
+  attendeeRejected?: number;
+
+  attendeeMaybe?: number;
+
+  attendeeAccepted?: number;
 }

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { AttendeeAnswerEnum } from './entities/attendee.entity';
 import { EventEntity } from './entities/event.entity';
 
 @Injectable()
@@ -17,8 +18,42 @@ export class EventService {
     return this.repository.createQueryBuilder('e').orderBy('e.id', 'DESC');
   }
 
+  public getEventsWithAttendeeCountQuery() {
+    return this.getEventBaseQuery()
+      .loadRelationCountAndMap('e.attendeeCount', 'e.attendees')
+      .loadRelationCountAndMap(
+        'e.attendeeAccepted',
+        'e.attendees',
+        'attendee',
+        (qb) =>
+          qb.where('attendee.answer = :answer', {
+            answer: AttendeeAnswerEnum.Accepted,
+          }),
+      )
+      .loadRelationCountAndMap(
+        'e.attendeeMaybe',
+        'e.attendees',
+        'attendee',
+        (qb) =>
+          qb.where('attendee.answer = :answer', {
+            answer: AttendeeAnswerEnum.Maybe,
+          }),
+      )
+      .loadRelationCountAndMap(
+        'e.attendeeRejected',
+        'e.attendees',
+        'attendee',
+        (qb) =>
+          qb.where('attendee.answer = :answer', {
+            answer: AttendeeAnswerEnum.Rejected,
+          }),
+      );
+  }
+
   public async getEvent(id: number): Promise<EventEntity | undefined> {
-    const query = this.getEventBaseQuery().andWhere('e.id=:id', { id });
+    const query = this.getEventsWithAttendeeCountQuery().andWhere('e.id=:id', {
+      id,
+    });
     this.logger.debug(query.getSql());
 
     return await query.getOne();

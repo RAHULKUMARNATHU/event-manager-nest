@@ -57,7 +57,7 @@ export class EventController {
     const events = await this.eventService.getEventsWithAttendeeCountFiltered(
       filter,
     );
-    // this.logger.debug(`Found ${events.length} events`);
+    this.logger.debug(`Found ${events.length} events`);
     return events;
   }
 
